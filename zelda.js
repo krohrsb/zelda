@@ -103,7 +103,9 @@ zelda(packageRoot, function (err) {
     return function (cb) {
       npmInstall(path.join(codeFolder, myPackages[dep]), cb)
     }
-  }), function (err) {
+  }).concat([function (cb) {
+      npmInstall(packageRoot, cb);
+  }]), function (err) {
     if (err) return console.error(err.stack || err.message || err)
     else console.log('Done!')
   })
@@ -117,8 +119,6 @@ function zelda (root, done) {
     done(new Error('Could not find a package.json in ' + root + '-- run command from inside a node project'))
     return
   }
-
-  toInstall.push(pkg.name)
 
   var deps = getDeps(pkg)
 
